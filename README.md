@@ -70,7 +70,39 @@ import pandas as pd
    # оценка точности предсказаний
    pred = clf.predict(X_test)
    ```
+4. Переобучение модели
 
+   ```python
+   def proc(pred):
+   mist_leg = ((y_test == 0) * pred).sum()
+   all_leg = (y_test == 0).sum()
+   proc_leg = 1 - mist_leg/all_leg
+   mist_ill = (y_test*(pred == 0)).sum()
+   all_ill = y_test.sum()
+   proc_ill = 1 - mist_ill/all_ill
+   return (proc_leg, proc_ill)
+
+   dep = 6
+   estim = 6
+   feat = np.shape(X_train)[1] + 1
+   siz = np.shape(y_test)[0]
+   ans = [0, 0, 0, 0, 0]
+   
+   for a in range(1, dep):
+     for b in range(1, estim):
+       for c in range(1, feat):
+         clf = RandomForestClassifier(max_depth=a,# максимальная глубина дерева
+                                n_estimators=b,# число деревьев в лесу
+                                max_features=c)# максимальное число признаков для каждого дерева
+         clf.fit(X_train, y_train) # обучаем
+         y_pred = clf.predict(X_test)
+         y_pred = y_pred.reshape(siz, 1)
+         leg_pr, ill_pr = proc(y_pred)
+         print(leg_pr, ill_pr, a, b, c)
+         if leg_pr + ill_pr > ans[0] + ans[1]:
+           ans = [leg_pr, ill_pr, a, b, c]
+   ```
+   
 ## Заключение
 Был проведен предварительный анализ данных, включающий проверку на наличие пустых значений и визуализацию данных с помощью графиков.
 Были использованы популярные инструменты для работы с данными, такие как pandas, matplotlib и seaborn.
