@@ -48,7 +48,10 @@ import pandas as pd
    dat.isna() # проверка на наличие пустых значений
    sns.countplot(x='Class', data=dat) # столбчатая диаграмма для количества мошеннических операций
    sns.scatterplot(data=dat, x="Amount", y="Class") # график зависимости мошеннических операций от суммы
-   sns.scatterplot(data=dat, x="Amount", y="Time") # график зависимости мошеннических операций от времени
+   sns.scatterplot(data=dat_class_0, x='Time', y='Amount', alpha=0.6) # график зависимости мошеннических операций от времени для немошеннических операций
+   sns.scatterplot(data=dat_class_1, x='Time', y='Amount', alpha=0.6) # график зависимости мошеннических операций от времени для мошеннических операций
+   sns.pairplot(dat_class_0, vars=features, diag_kind="kde") #матрицы графиков рассеяния для признаков v1-v10, класс 0
+   sns.pairplot(dat_class_1, vars=features, diag_kind="kde") #матрицы графиков рассеяния для признаков v1-v10, класс 1
    ```
 
 3. Обучение модели
@@ -60,8 +63,9 @@ import pandas as pd
    X = data[:, 0:-1]
    y = data[:, -1].reshape(size, 1)
 
-   # разделение на обучающую и тестовую выборки
-   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+   # разделяем на обучающие и тестовые, первая половина - обучающая, вторая - тестовая
+   X_train, X_test = np.split(X, [size // 2])
+   y_train, y_test = np.split(y, [size // 2])
 
    # создание модели и обучение
    clf = RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1)
