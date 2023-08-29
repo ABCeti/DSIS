@@ -1,3 +1,5 @@
+# Итоговая работа это файл version2.ipynb
+
 # DSIS
 Размер исходной выборки 143 Мб, после сжатия она стала весить 65,3 Мб. Так как на git можно залить файлы весом не более 25 Мб прикладываю ссылку на [Google Drive](https://drive.google.com/drive/folders/1Qs84ZhqFmcwx2sa-XYe86rEL_BKoUWAS?usp=sharing), где лежат исходники.
 
